@@ -1,13 +1,13 @@
 import tseslint from 'typescript-eslint';
 import angular from 'angular-eslint';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default defineConfig([
+  globalIgnores(['**/*.ico', '**/tsconfig.json', '**/tsconfig.*.json']),
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    files: ['**/*.ts'],
     extends: [
-      tseslint.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
@@ -84,7 +84,7 @@ export default defineConfig([
           comments: 160,
         },
       ],
-      'max-lines': ['error', 400],
+      'max-lines': ['error', 400], // my favorite rule to keep files small
       'no-bitwise': 'error',
       'no-console': 'off',
       'no-new-wrappers': 'error',
@@ -109,10 +109,36 @@ export default defineConfig([
       'no-implied-eval': 'error',
     },
   },
-  {},
   {
     files: ['**/*.html'],
-    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    rules: {},
+    extends: [
+      ...angular.configs.templateRecommended,
+      ...angular.configs.templateAccessibility,
+      eslintPluginPrettierRecommended,
+    ],
+    rules: {
+      // Angular template best practices
+      '@angular-eslint/template/attributes-order': [
+        'error',
+        {
+          alphabetical: true,
+          order: [
+            'STRUCTURAL_DIRECTIVE', // deprecated, use @if and @for instead
+            'TEMPLATE_REFERENCE', // e.g. `<input #inputRef>`
+            'ATTRIBUTE_BINDING', // e.g. `<input required>`, `id="3"`
+            'INPUT_BINDING', // e.g. `[id]="3"`, `[attr.colspan]="colspan"`,
+            'TWO_WAY_BINDING', // e.g. `[(id)]="id"`,
+            'OUTPUT_BINDING', // e.g. `(idChange)="handleChange()"`,
+          ],
+        },
+      ],
+      '@angular-eslint/template/button-has-type': 'warn',
+      '@angular-eslint/template/cyclomatic-complexity': ['warn', { maxComplexity: 10 }],
+      '@angular-eslint/template/eqeqeq': 'error',
+      '@angular-eslint/template/prefer-control-flow': 'error',
+      '@angular-eslint/template/prefer-ngsrc': 'warn',
+      '@angular-eslint/template/prefer-self-closing-tags': 'warn',
+      '@angular-eslint/template/use-track-by-function': 'warn',
+    },
   },
 ]);
