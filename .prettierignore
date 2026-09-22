@@ -27,4 +27,4 @@ environment*.ts
 .nvmrc
 .prettierignore
 .gitignore
-ewfwp-mortgage-calculator-app
+ewfwp-example-app
