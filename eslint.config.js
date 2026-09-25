@@ -1,26 +1,23 @@
-import tseslint from 'typescript-eslint';
-import angular from 'angular-eslint';
-import { defineConfig, globalIgnores } from 'eslint/config';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+// eslint.config.js
+// @ts-check
+const eslint = require('@eslint/js');
+const tseslint = require('typescript-eslint');
+const angular = require('angular-eslint');
+const eslintConfigPrettier = require('eslint-config-prettier');
 
-export default defineConfig([
-  globalIgnores(['**/*.ico', '**/tsconfig.json', '**/tsconfig.*.json']),
+module.exports = tseslint.config(
   {
+    ignores: ['.angular/**', '.nx/**', 'coverage/**', 'dist/**'],
     files: ['**/*.ts'],
     extends: [
+      eslint.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
-      eslintPluginPrettierRecommended,
+      eslintConfigPrettier,
     ],
+    processor: angular.processInlineTemplates,
     rules: {
-      'prettier/prettier': [
-        'error',
-        {
-          singleQuote: true,
-          parser: 'flow',
-        },
-      ],
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -111,11 +108,7 @@ export default defineConfig([
   },
   {
     files: ['**/*.html'],
-    extends: [
-      ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility,
-      eslintPluginPrettierRecommended,
-    ],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       // Angular template best practices
       '@angular-eslint/template/attributes-order': [
@@ -141,4 +134,4 @@ export default defineConfig([
       '@angular-eslint/template/use-track-by-function': 'warn',
     },
   },
-]);
+);

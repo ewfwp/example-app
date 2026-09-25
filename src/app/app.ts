@@ -1,11 +1,8 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [],
   selector: 'app-root',
   templateUrl: './app.html',
 })
-export class App {
-  readonly title = signal('ewfwp-example-app');
-}
+export class App {}

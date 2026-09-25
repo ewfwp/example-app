@@ -1,14 +1,10 @@
-import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import postcssPrefixSelector from 'postcss-prefix-selector';
 
-// Get name from the package.json file
-const { name } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
-
 export default defineConfig({
   build: {
-    outDir: `${name}/web-component`,
+    outDir: 'ewfwp-example-app/web-component',
     emptyOutDir: true,
     sourcemap: true,
 
@@ -26,7 +22,7 @@ export default defineConfig({
     postcss: {
       plugins: [
         postcssPrefixSelector({
-          prefix: name,
+          prefix: 'ewfwp-example-app',
         }),
       ],
     },
@@ -35,7 +31,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: `dist/${name}/browser/styles.css`,
+          src: 'dist/ewfwp-example-app/browser/styles.css',
           dest: 'assets',
           rename: { stripBase: true },
         },
